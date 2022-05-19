@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block info %}
+{% endblock %}
+
+
+
+{% block content %}
+    <div class="container m-4">
+
+        <div class="card" style="width: 50rem;">
+
+      <img src="{{post.image.url}}" class="card-img-top" alt="...">
+      <div class="card-body">
+          <h1>{{post.title | safe}}</h1>
+            <p>{{post.text | safe}}</p>
+      </div>
+</div>
+
+
+{% if user.is_authenticated %}
+  <form action="{% url 'post_like' post.id %}" method="POST">
+	{% csrf_token %}
+
+	{% if post_is_liked %}
+	<button type="submit" name="post_id" value="{{post.id}}" class="btn btn-info m-3">Dislike</button>
+	{% else %}
+	<button type="submit" name="post_id" value="{{post.id}}" class="btn btn-info m-3">Like</button>
+	{% endif %}
+  </form>
+{% else %}
+  <a class="btn btn-outline-info" href="{% url 'login' %}?next={{request.path}}">Log in to like this!</a><br>
+{% endif %}
+<p class="text-secondary m-3">{{ number_of_likes }} Like{{ number_of_likes|pluralize }}</p>
+
+
+
+    </div>
+
+{% endblock %}
+
+
+
